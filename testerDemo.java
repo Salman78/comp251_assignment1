@@ -29,8 +29,8 @@ public class testerDemo {
         int probe = openMap.probe(1, 1);
         System.out.println("Open Addressing probe check:" + (probe == 31));
 
-        //openMap.insertKey(0);
-        //System.out.println("Open Addressing insert check:" + (openMap.Table[0] == 0));
+        openMap.insertKey(0);
+        System.out.println("Open Addressing insert check:" + (openMap.Table[0] == 0));
 
         Random rand = new Random();
         //int  n = rand.nextInt(50) + 1;

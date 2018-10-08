@@ -30,15 +30,8 @@ public class Open_Addressing {
      */
     public int probe(int key, int i) {
         //ADD YOUR CODE HERE (CHANGE THE RETURN STATEMENT)
-        int hashValue = (((this.A*key) % (int)(Math.pow(2, this.w))) >> (w-r)) + i;
-        for(int j=0; j<=m-1; j++) {
-            if(hashValue > m-1) hashValue = hashValue - m;
-            if(isSlotEmpty(hashValue)) {
-                return hashValue;
-            }
-            hashValue++;
-                       
-        }
+        int hashValue = ((((this.A*key) % (int)(Math.pow(2, this.w))) >> (w-r)) + i) % (int) (Math.pow(2, r));
+              
         return hashValue;
     }
 
@@ -55,21 +48,19 @@ public class Open_Addressing {
      */
     public int insertKey(int key) {
         //ADD YOUR CODE HERE (CHANGE THE RETURN STATEMENT)
-        int collision = 0;        
-        int i =  0 + (int)(Math.random() * (((m-1) - 0) + 1));
+            
+        int finalHashValue = 0;
+        int i = 0;
         
-        int initialHashValue = (((this.A*key) % (int)(Math.pow(2, this.w))) >> (w-r)) + i;
-        if(initialHashValue > (m-1)) initialHashValue = initialHashValue - m;
-        int finalHashValue = this.probe(key, i); //hardcoding i = 0;
-        
-        if(finalHashValue - initialHashValue < 0) collision = (finalHashValue - initialHashValue) + (m-1);
-        else collision = (finalHashValue - initialHashValue);
-        
-        if(isSlotEmpty(finalHashValue)) {
-            this.Table[finalHashValue] = key;
-            return collision;
+        for(i=0; i <= m-1; i++) {
+            finalHashValue = this.probe(key, i);
+            if (isSlotEmpty(finalHashValue)) {
+                this.Table[finalHashValue] = key;
+                return i; // i = collision
+            }
         }
-        else return collision; //no empty slot found to insert value
+        return i; //i = collision
+        
     }
 
     /**

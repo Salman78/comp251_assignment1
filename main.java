@@ -135,6 +135,28 @@ public class main {
             205, 186, 107, 179};
 
         //ADD YOUR CODE HERE
+        
+        Open_Addressing probeTable = new Open_Addressing(w, 137);
+        for(int x=0; x < 16; x++) {
+            probeTable.insertKey(keysToInsert[x]);
+        }
+        for(int x=0; x < keysToRemove.length; x++) {
+            removeCollisions.add((double) probeTable.removeKey(keysToRemove[x]));
+            removeIndex.add((double) keysToRemove[x]);
+        }
+        //need to remove this block of code
+        System.out.println("new probe table of 16 elements");
+        for(int x : probeTable.Table) {
+            System.out.println(x);
+        }
+        System.out.println("no of collisions in each removekey attempted");
+        for(double x : removeCollisions) {
+            System.out.println(x);
+        }
+        System.out.println("removeIndex");
+        for(double x : removeIndex) {
+            System.out.println(x);
+        }
         generateCSVOutputFile("remove_collisions.csv", removeIndex, removeCollisions, removeCollisions);
 
         /*===========PART 3 : Experimenting with w===================*/
