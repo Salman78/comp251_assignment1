@@ -30,42 +30,16 @@ public class Open_Addressing {
      */
     public int probe(int key, int i) {
         //ADD YOUR CODE HERE (CHANGE THE RETURN STATEMENT)
-        int hashValue = 0;
-        hashValue = ((this.A*key) % (int)(Math.pow(2, this.w))) >> (w-r); 
-        /*
-        while(hashValue + i <= m-1) {
-            if(!(isSlotEmpty(hashValue+i))) {
-                i++;
-            }
-            else return hashValue + i; //when empty slot reached
-        }        
-        int j = i;
-        i = 0; //we start wrapping around the table and start from the beginning 
-        while(!(isSlotEmpty(i))) {
-            if(i == hashValue) {
-                break;
-            }
-            i++;
-        }
-        return hashValue + (i+j);
-         */
-        //int finalHashValue = hashValue;
-        //int collision = 0;
-        //if(isSlotEmpty(finalHashValue)) return finalHashValue;
-        
-        int finalHashValue = hashValue + i;
-        
+        int hashValue = (((this.A*key) % (int)(Math.pow(2, this.w))) >> (w-r)) + i;
         for(int j=0; j<=m-1; j++) {
-            
-            if(finalHashValue > m-1) finalHashValue = finalHashValue - (m-1);
-            
-            if(isSlotEmpty(finalHashValue)) {
-                return finalHashValue;
+            if(hashValue > m-1) hashValue = hashValue - m;
+            if(isSlotEmpty(hashValue)) {
+                return hashValue;
             }
-            finalHashValue++;
+            hashValue++;
                        
         }
-        return finalHashValue;
+        return hashValue;
     }
 
     /**
@@ -81,15 +55,18 @@ public class Open_Addressing {
      */
     public int insertKey(int key) {
         //ADD YOUR CODE HERE (CHANGE THE RETURN STATEMENT)
-        int initialHashValue = ((this.A*key) % (int)(Math.pow(2, this.w))) >> (w-r); 
-        
+        int collision = 0;        
         int i =  0 + (int)(Math.random() * (((m-1) - 0) + 1));
-        int finalHashValue = this.probe(key, 0); //hardcoding i = 0;
-        int collision = finalHashValue / (initialHashValue + i); //only works when there is at least one collision, i.e. the value of i is used in probe function
+        
+        int initialHashValue = (((this.A*key) % (int)(Math.pow(2, this.w))) >> (w-r)) + i;
+        if(initialHashValue > (m-1)) initialHashValue = initialHashValue - m;
+        int finalHashValue = this.probe(key, i); //hardcoding i = 0;
+        
+        if(finalHashValue - initialHashValue < 0) collision = (finalHashValue - initialHashValue) + (m-1);
+        else collision = (finalHashValue - initialHashValue);
         
         if(isSlotEmpty(finalHashValue)) {
             this.Table[finalHashValue] = key;
-            if(finalHashValue == initialHashValue) return 0; //collision is 0
             return collision;
         }
         else return collision; //no empty slot found to insert value

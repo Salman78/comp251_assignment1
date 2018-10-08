@@ -76,7 +76,7 @@ public class main {
         //value of w to use for the experiment on n
         int w = 10;
 
-        for (int n : nList) {
+        for (int n : nList) { //loops through the entire list
 
             //initializing two hash tables with a seed
             Chaining MyChainTable = new Chaining(w, 137);
@@ -97,8 +97,30 @@ public class main {
                         The CSV file will output the result which you can visualize
              */
             //ADD YOUR CODE HERE
+            double colChain = 0;
+            double colProbe = 0;
+            for(int i=0; i < n; i++) {
+                colChain = colChain + (double) MyChainTable.insertKey(keysToInsert[i]);
+                colProbe = colProbe + (double) MyProbeTable.insertKey(keysToInsert[i]);
+                
+            }
+            alphaList.add((double) n / (double) MyChainTable.m); //alpha will be same for both hashTable
+            avColListChain.add(colChain / (double) n);
+            avColListProbe.add(colProbe / (double) n);
         }
-
+        //need to erase this block of code
+        System.out.println("alpha list");
+        for(double x : alphaList) {
+            System.out.println(x);
+        }
+        System.out.println("chain list");
+        for(double x : avColListChain) {
+            System.out.println(x);
+        }
+        System.out.println("probe list");
+        for(double x : avColListProbe) {
+            System.out.println(x);
+        }
         generateCSVOutputFile("n_comparison.csv", alphaList, avColListChain, avColListProbe);
 
         /*===========    PART 2 : Test removeKey  ===================*/
