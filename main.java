@@ -97,16 +97,16 @@ public class main {
                         The CSV file will output the result which you can visualize
              */
             //ADD YOUR CODE HERE
-            double colChain = 0;
-            double colProbe = 0;
+            double colChain_task1 = 0;
+            double colProbe_task1 = 0;
             for(int i=0; i < n; i++) {
-                colChain = colChain + (double) MyChainTable.insertKey(keysToInsert[i]);
-                colProbe = colProbe + (double) MyProbeTable.insertKey(keysToInsert[i]);
+                colChain_task1 = colChain_task1 + (double) MyChainTable.insertKey(keysToInsert[i]);
+                colProbe_task1 = colProbe_task1 + (double) MyProbeTable.insertKey(keysToInsert[i]);
                 
             }
             alphaList.add((double) n / (double) MyChainTable.m); //alpha will be same for both hashTable
-            avColListChain.add(colChain / (double) n);
-            avColListProbe.add(colProbe / (double) n);
+            avColListChain.add(colChain_task1 / (double) n);
+            avColListProbe.add(colProbe_task1 / (double) n);
         }
         //need to erase this block of code
         System.out.println("alpha list");
@@ -175,6 +175,45 @@ public class main {
         ArrayList<Double> avColListProbe2 = new ArrayList<Double>();
 
         //ADD YOUR CODE HERE
+        w = 12;
+        int noOfW = 20;
+        int n = 30;
+        int simulation = 10;
+                        
+        for(int x=0; x < noOfW; x++) { //for each w
+            Chaining chainTable_task3 = new Chaining(w, -1);
+            Open_Addressing probeTable_task3 = new Open_Addressing(w, -1);
+            Double[] averageSimulationColChain = new Double[simulation];
+            Double[] averageSimulationColProbe = new Double[simulation];
+            
+            for(int y=0; y<simulation; y++) { //for each different A 
+                double colChain_task3 = 0;
+                double colProbe_task3 = 0;
+                
+                for(int z=0; z<n; z++) { //filling up both tables with n = 30 keys
+                    colChain_task3 = colChain_task3 + (double) chainTable_task3.insertKey(main.generateRandom(0, 500, -1)); //collision in each insertion
+                    colProbe_task3 = colProbe_task3 + (double) probeTable_task3.insertKey(main.generateRandom(0, 500, -1)); // ||
+                }                                
+                averageSimulationColChain[y] = colChain_task3 / (double) n;   //average no of collisions in each of 10 simulations in chaining                             
+                averageSimulationColProbe[y] = colProbe_task3 / (double) n;   //average no of collisions in each of 10 simulations in open addressing
+            }
+            //summing up the averaged collision value from the entire array in Chaining
+            double sum = 0;
+            for(int i=0; i<averageSimulationColChain.length; i++) {                
+                sum = sum + averageSimulationColChain[i];
+            }
+            avColListChain2.add(sum / (double) simulation); //extracting the finalRepresentative average of 10 simulation pack
+            //summing up the averaged collision value from the entire array in open-addressing
+            sum = 0;
+            for (int i = 0; i < averageSimulationColProbe.length; i++) {
+                sum = sum + averageSimulationColProbe[i];
+            }
+            avColListProbe2.add(sum / (double) simulation); //extracting the finalRepresentative average of 10 simulation pack
+            
+            w+=2; //incrementing w by 2
+            
+        }
+                
         generateCSVOutputFile("w_comparison.csv", alphaList2, avColListChain2, avColListProbe2);
 
     }
