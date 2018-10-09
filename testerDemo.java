@@ -67,34 +67,17 @@ public class testerDemo {
             openMap.insertKey(88);
             openMap.insertKey(86);
             openMap.insertKey(55);
-            
-            
-            
-            openMap.removeKey(45);
-            System.out.println("Open Addressing remove check:" + (openMap.Table[24] != openMap.Table[24]));
-            openMap.removeKey(9);
-            System.out.println("Open Addressing remove check:" + (openMap.Table[17] != openMap.Table[17]));
-            openMap.removeKey(44);
-            System.out.println("Open Addressing remove check:" + (openMap.Table[25] != openMap.Table[25]));
-            openMap.removeKey(86);
-            System.out.println("Open Addressing remove check:" + (openMap.Table[23] != openMap.Table[23]));
-            openMap.removeKey(29);
-            System.out.println("Open Addressing remove check:" + (openMap.Table[18] != openMap.Table[18]));
-            
-            
-            
-            
+                            
         
-        /*
-        for(int x = 0; x <= (openMap.m-1); x++) {
-            int deletedIndex = rand.nextInt((openMap.m-1)) + 1;
-            openMap.removeKey(openMap.Table[deletedIndex]);            
-            System.out.println("Open Addressing remove check:" + (openMap.Table[deletedIndex] != openMap.Table[deletedIndex]));
-        }
-        */
-        //openMap.insertKey(5);
-        //openMap.removeKey(5);
-        //System.out.println("Open Addressing remove check:" + (openMap.Table[30] != 5));
+            openMap.removeKey(41);
+            openMap.removeKey(37);
+            openMap.removeKey(44);
+            openMap.removeKey(31);
+            openMap.removeKey(75);
+            openMap.removeKey(5);
+            openMap.removeKey(41);
+            openMap.removeKey(0);
+            
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(new File("n_comparison.csv")));

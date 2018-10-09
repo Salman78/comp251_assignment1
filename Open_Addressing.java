@@ -52,11 +52,15 @@ public class Open_Addressing {
         int finalHashValue = 0;
         int i = 0;
         
-        for(i=0; i <= m-1; i++) {
+        for (i = 0; i <= m - 1; i++) {
             finalHashValue = this.probe(key, i);
-            if (isSlotEmpty(finalHashValue)) {
+            //checks for duplicates
+            if (Table[finalHashValue] == key) { //even if the slot is empty, the key wouldn't equal -1
+                return i;
+            }
+            else if(isSlotEmpty(finalHashValue)) {
                 this.Table[finalHashValue] = key;
-                return i; // i = collision
+                return i;
             }
         }
         return i; //i = collision
@@ -69,66 +73,27 @@ public class Open_Addressing {
      */
     public int removeKey(int key) {
         //ADD YOUR CODE HERE (CHANGE THE RETURN STATEMENT)
-        //first we traverse through the arraylist to find the element
-        int collision = 0;
-        int hashValue = this.search(key);
-        if(hashValue % 10 != 0) {
-            collision = hashValue;
-            return collision; //unsuccessful search returning collision
-        }
-        //element found
-        hashValue = hashValue/10; //normalizing the hashValue to get back the original value 
         
-        this.Table[hashValue] = -10; //we mark this table as free deleted index by assining the value -10
-        int i = 1;
-        /*
-        while(!(isSlotEmpty(hashValue + i) || hashValue + i <= (m-1))) { //we stop at next empty slot with value -1 or if index goes out of bound
-            if(((this.A*this.Table[hashValue+i] % (int)(Math.pow(2, this.w))) >> (w-r)) == hashValue) { //check if current value can be moved to deleted index
-                this.Table[hashValue] = this.Table[hashValue + i];
-                this.Table[hashValue + i] = -10; //current value updated to new deleted free index
+        int i = 0;
+        int deletedHashValue = 0;
+        for(i=0; i <= m-1; i++) {
+            deletedHashValue = this.search(key, i);
+            if (isSlotEmpty(deletedHashValue)) {
+                return i; //i = no. of collisions
             }
-            i++;
-        }
-          */
-        boolean traverse = true;
-        while(hashValue + i <= m-1) {
-            if(!(isSlotEmpty(hashValue + i))) {
-                if (((this.A * this.Table[hashValue + i] % (int) (Math.pow(2, this.w))) >> (w - r)) == hashValue) { //check if current value can be moved to deleted index
-                    this.Table[hashValue] = this.Table[hashValue + i];
-                    this.Table[hashValue + i] = -10; //current value updated to new deleted free index
-                }
-                i++;
-            }
-            else if(isSlotEmpty(hashValue + i)) {
-                traverse = false;
+            else if(Table[deletedHashValue] == key) {
+                Table[deletedHashValue] = -2;
+                return i;
             }
         }
-        if(traverse == false) {
-            return collision;
-        }
-        i = 0;
-        while(i != hashValue) {
-            if (((this.A * this.Table[i] % (int) (Math.pow(2, this.w))) >> (w - r)) == hashValue) { //check if current value can be moved to deleted index
-                this.Table[hashValue] = this.Table[i];
-                this.Table[i] = -10; //current value updated to new deleted free index
-            }
-            i++;
-        }
-        return collision;
+        return i;
+
     }
     //helper method
-    public int search(int key) {
-        int initialHashValue = ((this.A*key) % (int)(Math.pow(2, this.w))) >> (w-r);
-        int collision = 0;
-        while(!(isSlotEmpty(initialHashValue))) { //stops when encouters -1 i.e next empty slot from initialHashValue
-            if(this.Table[initialHashValue] == key) {
-                return 10*initialHashValue; //a successful search returns hashValue multiplied by ten
-            }
-            initialHashValue++;
-            collision++;
-            
-        }
-        return collision; //a failed search returns collision
+    public int search(int key, int i) {
+        int hashValue = ((((this.A * key) % (int) (Math.pow(2, this.w))) >> (w - r)) + i) % (int) (Math.pow(2, r));
+
+        return hashValue;
     }
 
 }
