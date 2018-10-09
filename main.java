@@ -158,37 +158,47 @@ public class main {
         ArrayList<Double> avColListProbe2 = new ArrayList<Double>();
 
         //ADD YOUR CODE HERE
-        w = 12;
-        int noOfW = 20;
+        ArrayList<Double> valueOfW = new ArrayList<Double>();
+        for(int m=12; m<22; m++) {
+            valueOfW.add((double) m);
+        }
+        int noOfW = 10;
         int n = 30;
         int simulation = 10;
+        int sizeOfTable = 0;
                         
         for(int x=0; x < noOfW; x++) { //for each w
-            Chaining chainTable_task3 = new Chaining(w, -1);
-            Open_Addressing probeTable_task3 = new Open_Addressing(w, -1);
+            double input = valueOfW.get(x);
+            
             Double[] averageSimulationColChain = new Double[simulation];
             Double[] averageSimulationColProbe = new Double[simulation];
             
             for(int y=0; y<simulation; y++) { //for each different A 
-                double colChain_task3 = 0;
-                double colProbe_task3 = 0;
+                Chaining chainTable_task3 = new Chaining((int) input, -1);
+                Open_Addressing probeTable_task3 = new Open_Addressing((int) input, -1);
+                sizeOfTable = probeTable_task3.m; //could've used chainTable_task3.m as well
                 
+                
+                double totalColChain_task3 = 0;
+                double totalColProbe_task3 = 0;
+                                
                 for(int z=0; z<n; z++) { //filling up both tables with n = 30 keys
-                    int random = main.generateRandom(0, 500, -1); //storing into random since generateRandom gives diff values diff calls
-                    if(!(main.duplicate(chainTable_task3.insertKey(random)))) { //
-                        colChain_task3 = colChain_task3 + (double) chainTable_task3.insertKey(random);
+                    int random = main.generateRandom(0, 500, -1);
+                    int tempColChain_task3 = chainTable_task3.insertKey(random);
+                    if(tempColChain_task3 != -1) { //
+                        totalColChain_task3 = totalColChain_task3 + (double) tempColChain_task3;
                     }
-                    
-                    if(!(main.duplicate(probeTable_task3.insertKey(random)))) {
-                        colProbe_task3 = colProbe_task3 + (double) probeTable_task3.insertKey(random);
+                    int tempColProbe_task3 = probeTable_task3.insertKey(random);
+                    if(tempColProbe_task3 != -1) {
+                        totalColProbe_task3 = totalColProbe_task3 + (double) tempColProbe_task3;
                     }
                     
                 }                                
-                averageSimulationColChain[y] = colChain_task3 / (double) n;   //average no of collisions in each of 10 simulations in chaining                             
-                averageSimulationColProbe[y] = colProbe_task3 / (double) n;   //average no of collisions in each of 10 simulations in open addressing
+                averageSimulationColChain[y] = totalColChain_task3 / (double) n;   //average no of collisions in each of 10 simulations in chaining                             
+                averageSimulationColProbe[y] = totalColProbe_task3 / (double) n;   //average no of collisions in each of 10 simulations in open addressing
             }
             //summing up the averaged collision value from the entire array in Chaining
-            alphaList2.add((double) n / (double )probeTable_task3.m);
+            alphaList2.add((double) n / (double) sizeOfTable);
             double sum = 0;
             for(int i=0; i<averageSimulationColChain.length; i++) {                
                 sum = sum + averageSimulationColChain[i];
@@ -201,11 +211,11 @@ public class main {
             }
             avColListProbe2.add(sum / (double) simulation); //extracting the finalRepresentative average of 10 simulation pack
             
-            w+=2; //incrementing w by 2
+            //w++; //incrementing w by 2
             
         }
                 
-        generateCSVOutputFile("w_comparison.csv", alphaList2, avColListChain2, avColListProbe2);
+        generateCSVOutputFile("w_comparison.csv", valueOfW, avColListChain2, avColListProbe2);
 
     }
 
