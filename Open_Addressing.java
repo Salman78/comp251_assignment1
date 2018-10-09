@@ -56,7 +56,7 @@ public class Open_Addressing {
             finalHashValue = this.probe(key, i);
             //checks for duplicates
             if (Table[finalHashValue] == key) { //even if the slot is empty, the key wouldn't equal -1
-                return i;
+                return -1;
             }
             else if(isSlotEmpty(finalHashValue)) {
                 this.Table[finalHashValue] = key;

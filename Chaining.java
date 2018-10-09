@@ -50,6 +50,11 @@ public class Chaining {
         int collision = 0;
                 
         collision = Table.get(hashValue).size(); //no. of collisions equal no. of elements in the given subordinate arraylist
+        for(int i : Table.get(hashValue)) {
+            if(i == key) {
+                return -1;
+            }
+        }
         Table.get(hashValue).add(key);
         return collision;
     }

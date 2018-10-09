@@ -26,6 +26,13 @@ public class main {
         int i = generator.nextInt(max - min - 1);
         return i + min + 1;
     }
+    //helper method
+    public static boolean duplicate(int value) {
+        if(value == -1) {
+            return true;
+        }
+        else return false;
+    }
 
     /**
      * export CSV file
@@ -99,28 +106,16 @@ public class main {
             //ADD YOUR CODE HERE
             double colChain_task1 = 0;
             double colProbe_task1 = 0;
-            for(int i=0; i < n; i++) {
+           
+            for(int i=0; i < n; i++) {                
                 colChain_task1 = colChain_task1 + (double) MyChainTable.insertKey(keysToInsert[i]);
-                colProbe_task1 = colProbe_task1 + (double) MyProbeTable.insertKey(keysToInsert[i]);
-                
+                colProbe_task1 = colProbe_task1 + (double) MyProbeTable.insertKey(keysToInsert[i]);                
             }
             alphaList.add((double) n / (double) MyChainTable.m); //alpha will be same for both hashTable
             avColListChain.add(colChain_task1 / (double) n);
             avColListProbe.add(colProbe_task1 / (double) n);
         }
-        //need to erase this block of code
-        System.out.println("alpha list");
-        for(double x : alphaList) {
-            System.out.println(x);
-        }
-        System.out.println("chain list");
-        for(double x : avColListChain) {
-            System.out.println(x);
-        }
-        System.out.println("probe list");
-        for(double x : avColListProbe) {
-            System.out.println(x);
-        }
+        
         generateCSVOutputFile("n_comparison.csv", alphaList, avColListChain, avColListProbe);
 
         /*===========    PART 2 : Test removeKey  ===================*/
@@ -142,21 +137,9 @@ public class main {
         }
         for(int x=0; x < keysToRemove.length; x++) {
             removeCollisions.add((double) probeTable.removeKey(keysToRemove[x]));
-            removeIndex.add((double) keysToRemove[x]);
+            removeIndex.add((double) x);
         }
-        //need to remove this block of code
-        System.out.println("new probe table of 16 elements");
-        for(int x : probeTable.Table) {
-            System.out.println(x);
-        }
-        System.out.println("no of collisions in each removekey attempted");
-        for(double x : removeCollisions) {
-            System.out.println(x);
-        }
-        System.out.println("removeIndex");
-        for(double x : removeIndex) {
-            System.out.println(x);
-        }
+        
         generateCSVOutputFile("remove_collisions.csv", removeIndex, removeCollisions, removeCollisions);
 
         /*===========PART 3 : Experimenting with w===================*/
@@ -191,13 +174,21 @@ public class main {
                 double colProbe_task3 = 0;
                 
                 for(int z=0; z<n; z++) { //filling up both tables with n = 30 keys
-                    colChain_task3 = colChain_task3 + (double) chainTable_task3.insertKey(main.generateRandom(0, 500, -1)); //collision in each insertion
-                    colProbe_task3 = colProbe_task3 + (double) probeTable_task3.insertKey(main.generateRandom(0, 500, -1)); // ||
+                    int random = main.generateRandom(0, 500, -1); //storing into random since generateRandom gives diff values diff calls
+                    if(!(main.duplicate(chainTable_task3.insertKey(random)))) { //
+                        colChain_task3 = colChain_task3 + (double) chainTable_task3.insertKey(random);
+                    }
+                    
+                    if(!(main.duplicate(probeTable_task3.insertKey(random)))) {
+                        colProbe_task3 = colProbe_task3 + (double) probeTable_task3.insertKey(random);
+                    }
+                    
                 }                                
                 averageSimulationColChain[y] = colChain_task3 / (double) n;   //average no of collisions in each of 10 simulations in chaining                             
                 averageSimulationColProbe[y] = colProbe_task3 / (double) n;   //average no of collisions in each of 10 simulations in open addressing
             }
             //summing up the averaged collision value from the entire array in Chaining
+            alphaList2.add((double) n / (double )probeTable_task3.m);
             double sum = 0;
             for(int i=0; i<averageSimulationColChain.length; i++) {                
                 sum = sum + averageSimulationColChain[i];
