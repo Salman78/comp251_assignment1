@@ -77,9 +77,9 @@ public class Open_Addressing {
         int i = 0;
         int deletedHashValue = 0;
         for(i=0; i <= m-1; i++) {
-            deletedHashValue = this.search(key, i);
+            deletedHashValue = this.probe(key, i);
             if (isSlotEmpty(deletedHashValue)) {
-                return i; //i = no. of collisions
+                return i+1; //i = no. of collisions
             }
             else if(Table[deletedHashValue] == key) {
                 Table[deletedHashValue] = -2;
@@ -89,11 +89,5 @@ public class Open_Addressing {
         return i;
 
     }
-    //helper method
-    public int search(int key, int i) {
-        int hashValue = ((((this.A * key) % (int) (Math.pow(2, this.w))) >> (w - r)) + i) % (int) (Math.pow(2, r));
-
-        return hashValue;
-    }
-
+        
 }

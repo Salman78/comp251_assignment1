@@ -26,13 +26,7 @@ public class main {
         int i = generator.nextInt(max - min - 1);
         return i + min + 1;
     }
-    //helper method
-    public static boolean duplicate(int value) {
-        if(value == -1) {
-            return true;
-        }
-        else return false;
-    }
+    
 
     /**
      * export CSV file
@@ -158,24 +152,21 @@ public class main {
         ArrayList<Double> avColListProbe2 = new ArrayList<Double>();
 
         //ADD YOUR CODE HERE
-        ArrayList<Double> valueOfW = new ArrayList<Double>();
-        for(int m=12; m<22; m++) {
-            valueOfW.add((double) m);
-        }
-        int noOfW = 10;
-        int n = 30;
+        int[] wValues = {10,12,14,15,16,17};
+        
+        int n = 32; //no of keys
         int simulation = 10;
         int sizeOfTable = 0;
                         
-        for(int x=0; x < noOfW; x++) { //for each w
-            double input = valueOfW.get(x);
+        for(int x=0; x < wValues.length; x++) { //for each w
+            //double input = valueOfW.get(x);
             
             Double[] averageSimulationColChain = new Double[simulation];
             Double[] averageSimulationColProbe = new Double[simulation];
             
-            for(int y=0; y<simulation; y++) { //for each different A 
-                Chaining chainTable_task3 = new Chaining((int) input, -1);
-                Open_Addressing probeTable_task3 = new Open_Addressing((int) input, -1);
+            for(int y=0; y<simulation; y++) { //for each simulation 
+                Chaining chainTable_task3 = new Chaining(wValues[x], -1);
+                Open_Addressing probeTable_task3 = new Open_Addressing(wValues[x], -1);
                 sizeOfTable = probeTable_task3.m; //could've used chainTable_task3.m as well
                 
                 
@@ -215,7 +206,7 @@ public class main {
             
         }
                 
-        generateCSVOutputFile("w_comparison.csv", valueOfW, avColListChain2, avColListProbe2);
+        generateCSVOutputFile("w_comparison.csv", alphaList2, avColListChain2, avColListProbe2);
 
     }
 
